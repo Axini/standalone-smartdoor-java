@@ -11,18 +11,16 @@ import org.java_websocket.server.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// SmartDoorServer: WebSocketServer for the SmartDoor SUT.
+// SmartDoorServer: WebSocket server for the SmartDoor SUT.
 public class SmartDoorServer extends WebSocketServer {
     private static Logger logger =
         LoggerFactory.getLogger(SmartDoorServer.class);
 
-    private String      manufacturer;
     private SmartDoor   door;
     private WebSocket   client_connection;
 
-    public SmartDoorServer(String manufacturer, InetSocketAddress address) {
+    public SmartDoorServer(InetSocketAddress address) {
         super(address);
-        this.manufacturer = manufacturer;
         this.door = null;
         this.client_connection = null;
     }
@@ -36,8 +34,8 @@ public class SmartDoorServer extends WebSocketServer {
         }
         else {
             client_connection = conn;
-            door = new SmartDoor(this, manufacturer);
-            logger.info("SmartDoor created: " + manufacturer);
+            door = new SmartDoor(this);
+            logger.info("SmartDoor created");
         }
     }
 
@@ -58,7 +56,8 @@ public class SmartDoorServer extends WebSocketServer {
 
         switch(action) {
         case "RESET":
-            reset_sut(param);
+            // We are ignoring any manufacturer param.
+            reset_sut();
             break;
         default:
             door.handle_input(message);
@@ -85,25 +84,9 @@ public class SmartDoorServer extends WebSocketServer {
             client_connection.send(message);
     }
 
-    private void reset_sut(String manufacturer) {
-        if (manufacturer == null) {
-            logger.info("Resetting SUT");
-            door = new SmartDoor(this, this.manufacturer);
-            send("RESET_PERFORMED");
-        } else {
-            if (SmartDoor.MANUFACTURERS.contains(manufacturer)) {
-                logger.info("Resetting SUT and change manufacturer to: " +
-                             manufacturer);
-                this.manufacturer = manufacturer;
-            }
-            else {
-                // unknown manufacturer
-                logger.error("Unknown manufacturer: " + manufacturer + "!");
-                logger.info("Resetting SUT to: " + SmartDoor.M_AXINI + " instead.");
-                this.manufacturer = SmartDoor.M_AXINI;
-            }
-            door = new SmartDoor(this, this.manufacturer);
-            send("RESET_PERFORMED");
-        }
+    private void reset_sut() {
+        logger.info("Resetting SUT");
+        door = new SmartDoor(this);
+        send("RESET_PERFORMED");
     }
 }

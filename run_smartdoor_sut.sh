@@ -9,7 +9,6 @@ CLASS_PATH=.:$WEBSOCKET_JARS:$SLF4J_JARS
 
 HOST=localhost
 PORT=3001
-MANUFACTURER=Axini
 
 echo "Starting SmartDoor SUT at ws://$HOST:$PORT"
-$JAVA -cp $CLASS_PATH SmartDoorSut $HOST $PORT $MANUFACTURER
+$JAVA -cp $CLASS_PATH SmartDoorSut $HOST $PORT
