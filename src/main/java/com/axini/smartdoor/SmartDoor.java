@@ -1,7 +1,9 @@
+package com.axini.smartdoor;
+
 // Copyright 2023 Axini B.V. https://www.axini.com, see: LICENSE.txt.
 
 // This version of the SmartDoor is the Java version of the original Ruby
-// version of the Standalone Smartdoor SUT.
+// version of the (standalone) Smartdoor SUT.
 
 // With respect to the original Ruby version, however, only a single
 // instance is retained: the 'Axini' SmartDoor SUT. All other (buggy)
@@ -39,8 +41,8 @@ public class SmartDoor {
         case "LOCK"     : lock(param); break;
         case "UNLOCK"   : unlock(param); break;
         case "OPENED", "CLOSED", "LOCKED", "UNLOCKED",
-            "INVALID_COMMAND", "INVALID_PASSCODE", "INCORRECT_PASSCODE":
-            response(); break;
+            "INVALID_COMMAND", "INVALID_PASSCODE", "INCORRECT_PASSCODE"
+                        : response(); break;
         default:
             server.send("INVALID_COMMAND");
         }
@@ -130,7 +132,6 @@ public class SmartDoor {
         default:
             System.out.println("ERROR: unknown state");
         }
-
     }
 
     // Handles the 'unlock' command.

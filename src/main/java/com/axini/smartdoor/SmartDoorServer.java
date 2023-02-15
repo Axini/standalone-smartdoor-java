@@ -1,3 +1,5 @@
+package com.axini.smartdoor;
+
 // Copyright 2023 Axini B.V. https://www.axini.com, see: LICENSE.txt.
 
 import java.net.InetSocketAddress;
@@ -77,7 +79,7 @@ public class SmartDoorServer extends WebSocketServer {
     }
 
     public void send(String message) {
-        logger.info("Sending message: " + message);
+        logger.info("Sending message:  " + message);
         if (client_connection == null)
             logger.error("WebSocket connection is not yet initialised");
         else
