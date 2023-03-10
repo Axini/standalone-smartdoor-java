@@ -11,11 +11,11 @@ The software is distributed under the MIT license, see LICENSE.txt.
 
 # Specification
 
-The standalone SmartDoor SUT encapsulates a SmartDoor implementation, which can be accessed using a WebSocket connection: the SmartDoor SUT acts as a (non-secure) WebSocket server. Communication with the SmartDoor SUT is only with text messages. By default the SmartDoor SUT listens on ws://127.0.0.1:3001.
+The standalone SmartDoor application encapsulates a SmartDoor implementation, which can be accessed using a WebSocket connection: the SmartDoor application acts as a (non-secure) WebSocket server. Communication with the SmartDoor SUT is only with text messages. By default the SmartDoor application listens on `ws://127.0.0.1:3001`.
 
-All messages and to (commands) and from (replies) the SmartDoor SUT are in UPPERCASE letters, e.g., "OPEN", "CLOSE", "CLOSED", "INVALID_COMMAND" (the quotes "" are not part of the message). If a command has a parameter ("LOCK" and "UNLOCK") it is separated by a double colon (:). For example: "LOCK:1234" and "UNLOCK:57291". 
+All messages and to (commands) and from (replies) the SmartDoor application are in UPPERCASE letters, e.g., `OPEN`, `CLOSE`, `CLOSED`, `INVALID_COMMAND` (the quotes `` are not part of the message). If a command has a parameter (`LOCK` and `UNLOCK`) it is separated by a double colon (`:``). For example: `LOCK:1234` and `UNLOCK:57291`. 
 
-The SmartDoor SUT supports all messages from the "SmartDoor IRS Version 2.0 (Sep 2020)" specification, but then in UPPERCASE. Furthermore, the SmartDoor SUT offers a "RESET" command to reset the SmartDoor completely (i.e., to the initial 'closed and unlocked' state). When the reset is finished, the SmartDoor SUT will send a "RESET_PERFORMED" message. 
+The SmartDoor application supports all messages from the "SmartDoor IRS Version 2.0 (Sep 2020)" specification, but then in UPPERCASE. Furthermore, the SmartDoor application offers a `RESET` command to reset the SmartDoor completely (i.e., to the initial 'closed and unlocked' state). When the reset is finished, the SmartDoor application will send a `RESET_PERFORMED` message. 
 
 
 # Building the application - Maven
@@ -26,38 +26,40 @@ The Java application has been organized as a Maven application (https://maven.ap
 ## Building executable jar *with* external dependencies
 
 Maven's `pom.xml` defines all external dependencies and plugins to build a single jar archive including all external jars. The single jar with all dependencies can be built with:
-
+```
 $ mvn compile assembly:single
-
+```
 This will generate the following jar archive:
-`./target/standalone-smartdoor-<version>-jar-with-dependencies.jar`
-
+```
+./target/standalone-smartdoor-<version>-jar-with-dependencies.jar`
+```
 Where `<version>` is the version as specified in `pom.xml`. It is possible to rename the jar archive, of course.
 
 The SmartDoor application can now be started with:
-
+```
 $ java -jar standalone-smartdoor-<version>-jar-with-dependencies.jar [<host> <port>]
+```
 
 ## Building executable jar without external libraries
 
 It is also possible to build a jar archive with only the classes of the SmartDoor application:
-
+```
 $ mvn package
-
+```
 When executing the (small) generated jar, one now needs to specify the jar files of the external libraries.
 
 ## Cleaning up
 
-After generating the Java classes and the jar file the repository can be cleaned up with (after copying the .jar file to safe place):
-
+After generating the Java classes and the jar file the repository can be cleaned up with (after copying the `.jar` file to safe place):
+```
 $ mvn clean
-
-This will remove the ./target directory, containing the compiled classes and jar files.
+```
+This will remove the `./target` directory, containing the compiled classes and jar files.
 
 
 # External libraries
 
-Maven's pom.xml specifies the two external dependencies of the SmartDoor application. When compiling the application with Maven, these dependencies are automatically downloaded from the Maven Central Repository: https://search.maven.org.
+Maven's `pom.xml` specifies the two external dependencies of the SmartDoor application. When compiling the application with Maven, these dependencies are automatically downloaded from the Maven Central Repository: https://search.maven.org.
 
 ## Java-Websocket
 https://github.com/TooTallNate/Java-WebSocket
@@ -70,10 +72,10 @@ The file `./main/resources/simplelogger.properties` contains the (formatting) se
 
 # Usage
 
-By default, the SmartDoor application starts a WebSocket server at address ws://127.0.0.1:3001. This can be changed on the command-line, by specifying both the hostname and the port, for example:
-
+By default, the SmartDoor application starts a WebSocket server at address `ws://127.0.0.1:3001`. This can be changed on the command-line, by specifying both the hostname and the port, for example:
+```
 $ java -jar standalone-smartdoor-<version>-jar-with-dependencies.jar localhost 1234
-
+```
 
 # Current limitations
 
