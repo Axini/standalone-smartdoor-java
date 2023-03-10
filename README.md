@@ -1,5 +1,3 @@
-// Copyright 2023 Axini B.V. https://www.axini.com, see: LICENSE.txt.
-
 # Description
 
 This project provides a pure *Java* implementation of a *standalone* SmartDoor application. The implementation is heavily based on Axini's original, in-house Ruby implementation of the (standalone) SmartDoor SUT. With respect to the original Ruby version, however, only a single SUT is provided: the correct 'Axini' SmartDoor SUT. All other (buggy) implementations are not included in the application.
@@ -7,6 +5,8 @@ This project provides a pure *Java* implementation of a *standalone* SmartDoor a
 This *pure* Java implementation has been developed to make it easier to distribute the SmartDoor SUT. It is not longer required to encapsulate the Ruby implementation of the SmartDoor into a >50MB jar file containing a complete JRuby distribution.
 
 This is the initial version of the implementation; it is still work in progress.
+
+The software is distributed under the MIT license, see LICENSE.txt.
 
 
 # Specification
