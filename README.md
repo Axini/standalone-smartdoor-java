@@ -13,16 +13,27 @@ The software is distributed under the MIT license, see LICENSE.txt.
 
 The standalone SmartDoor application encapsulates a SmartDoor implementation, which can be accessed using a WebSocket connection: the SmartDoor application acts as a (non-secure) WebSocket server. Communication with the SmartDoor SUT is only with text messages. By default the SmartDoor application listens on `ws://127.0.0.1:3001`.
 
-All messages and to (commands) and from (replies) the SmartDoor application are in UPPERCASE letters, e.g., `OPEN`, `CLOSE`, `CLOSED`, `INVALID_COMMAND` (the quotes `` are not part of the message). If a command has a parameter (`LOCK` and `UNLOCK`) it is separated by a double colon (`:``). For example: `LOCK:1234` and `UNLOCK:57291`. 
+All messages and to (commands) and from (replies) the SmartDoor application are in UPPERCASE letters, e.g., `OPEN`, `CLOSE`, `CLOSED`, `INVALID_COMMAND` (the quotes `` are not part of the message). If a command has a parameter (`LOCK` and `UNLOCK`) it is separated by a double colon (`:``). For example: `LOCK:1234` and `UNLOCK:57291`.
 
-The SmartDoor application supports all messages from the "SmartDoor IRS Version 2.0 (Sep 2020)" specification, but then in UPPERCASE. Furthermore, the SmartDoor application offers a `RESET` command to reset the SmartDoor completely (i.e., to the initial 'closed and unlocked' state). When the reset is finished, the SmartDoor application will send a `RESET_PERFORMED` message. 
+The SmartDoor application supports all messages from the "SmartDoor IRS Version 2.0 (Sep 2020)" specification, but then in UPPERCASE. Furthermore, the SmartDoor application offers a `RESET` command to reset the SmartDoor completely (i.e., to the initial 'closed and unlocked' state). When the reset is finished, the SmartDoor application will send a `RESET_PERFORMED` message.
 
 
 # Building the application - Maven
 
-The Java application has been organized as a Maven application (https://maven.apache.org). The Java source files of the application reside in the following directory: 
+The Java application has been organized as a Maven application (https://maven.apache.org). The Java source files of the application reside in the following directory:
 `./src/main/java/com/axini/smartdoor`.
 
+The current implementation is based on Java 11, this can be updated in the following pom file property:
+
+```java
+  <properties>
+    <maven.compiler.source>YOUR JAVA VERSION HERE</maven.compiler.source>
+    <maven.compiler.target>YOUR JAVA VERSION HERE</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+```
+
+Make sure your maven version and Java version are in sync. The `$JAVA_HOME` env variable can be used to check this.
 ## Building executable jar *with* external dependencies
 
 Maven's `pom.xml` defines all external dependencies and plugins to build a single jar archive including all external jars. The single jar with all dependencies can be built with:

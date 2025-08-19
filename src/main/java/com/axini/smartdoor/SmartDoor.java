@@ -40,9 +40,13 @@ public class SmartDoor {
         case "CLOSE"    : close(); break;
         case "LOCK"     : lock(param); break;
         case "UNLOCK"   : unlock(param); break;
-        case "OPENED", "CLOSED", "LOCKED", "UNLOCKED",
-            "INVALID_COMMAND", "INVALID_PASSCODE", "INCORRECT_PASSCODE"
-                        : response(); break;
+        case "OPENED":
+        case "CLOSED":
+        case "LOCKED":
+        case "UNLOCKED":
+        case "INVALID_COMMAND":
+        case "INVALID_PASSCODE":
+        case "INCORRECT_PASSCODE": response(); break;
         default:
             server.send("INVALID_COMMAND");
         }
@@ -144,7 +148,8 @@ public class SmartDoor {
         int passcode = Integer.parseInt(passcode_param);
 
         switch(state) {
-        case CLOSED, OPENED:
+        case CLOSED:
+        case OPENED:
             server.send("INVALID_COMMAND");
             break;
 
