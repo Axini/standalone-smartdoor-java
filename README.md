@@ -1,13 +1,8 @@
 # Description
 
-This project provides a pure *Java* implementation of a *standalone* SmartDoor application. The implementation is heavily based on Axini's original, in-house Ruby implementation of the (standalone) SmartDoor SUT. With respect to the original Ruby version, however, only a single SUT is provided: the correct 'Axini' SmartDoor SUT. All other (buggy) implementations are not included in the application.
-
-This *pure* Java implementation has been developed to make it easier to distribute the SmartDoor SUT. It is not longer required to encapsulate the Ruby implementation of the SmartDoor into a >50MB jar file containing a complete JRuby distribution.
-
-This is the initial version of the implementation; it is still work in progress.
+This project provides a pure *Java* implementation of a *standalone* SmartDoor application. The implementation is heavily based on Axini's original, in-house Ruby implementation of the (standalone) SmartDoor SUT. With respect to the original Ruby version, however, only a single manufacturer is provided: the correct 'Axini' SmartDoor SUT. All other (buggy) implementations are not included in the application.
 
 The software is distributed under the MIT license, see LICENSE.txt.
-
 
 # Specification
 
@@ -25,7 +20,7 @@ The Java application has been organized as a Maven application (https://maven.ap
 
 The current implementation is based on Java 11, this can be updated in the following pom file property:
 
-```java
+```xml
   <properties>
     <maven.compiler.source>YOUR JAVA VERSION HERE</maven.compiler.source>
     <maven.compiler.target>YOUR JAVA VERSION HERE</maven.compiler.target>
@@ -34,21 +29,33 @@ The current implementation is based on Java 11, this can be updated in the follo
 ```
 
 Make sure your maven version and Java version are in sync. The `$JAVA_HOME` env variable can be used to check this.
+
 ## Building executable jar *with* external dependencies
 
 Maven's `pom.xml` defines all external dependencies and plugins to build a single jar archive including all external jars. The single jar with all dependencies can be built with:
+
+```bash
+mvn compile assembly:single
 ```
-$ mvn compile assembly:single
-```
+
 This will generate the following jar archive:
+
+```bash
+./target/standalone-smartdoor-<version>-jar-with-dependencies.jar
 ```
-./target/standalone-smartdoor-<version>-jar-with-dependencies.jar`
-```
+
 Where `<version>` is the version as specified in `pom.xml`. It is possible to rename the jar archive, of course.
 
 The SmartDoor application can now be started with:
+
+```bash
+java -jar standalone-smartdoor-<version>-jar-with-dependencies.jar [<host> <port>]
 ```
-$ java -jar standalone-smartdoor-<version>-jar-with-dependencies.jar [<host> <port>]
+
+A convenience script is provided as well:
+
+```bash
+./smartdoor
 ```
 
 ## Building executable jar without external libraries
@@ -62,11 +69,12 @@ When executing the (small) generated jar, one now needs to specify the jar files
 ## Cleaning up
 
 After generating the Java classes and the jar file the repository can be cleaned up with (after copying the `.jar` file to safe place):
-```
-$ mvn clean
-```
-This will remove the `./target` directory, containing the compiled classes and jar files.
 
+```bash
+mvn clean
+```
+
+This will remove the `./target` directory, containing the compiled classes and jar files.
 
 # External libraries
 
@@ -80,12 +88,12 @@ https://www.slf4j.org/
 
 The file `./main/resources/simplelogger.properties` contains the (formatting) settings of the logger. This file is automatically copied to the resulting `jar` file of the SmartDoor application.
 
-
 # Usage
 
 By default, the SmartDoor application starts a WebSocket server at address `ws://127.0.0.1:3001`. This can be changed on the command-line, by specifying both the hostname and the port, for example:
-```
-$ java -jar standalone-smartdoor-<version>-jar-with-dependencies.jar localhost 1234
+
+```bash
+java -jar standalone-smartdoor-<version>-jar-with-dependencies.jar localhost 1234
 ```
 
 # Current limitations

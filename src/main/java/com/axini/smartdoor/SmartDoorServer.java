@@ -18,24 +18,24 @@ public class SmartDoorServer extends WebSocketServer {
     private static Logger logger =
         LoggerFactory.getLogger(SmartDoorServer.class);
 
-    private SmartDoor   door;
-    private WebSocket   client_connection;
+    private SmartDoor door;
+    private WebSocket clientConnection;
 
     public SmartDoorServer(InetSocketAddress address) {
         super(address);
         this.door = null;
-        this.client_connection = null;
+        this.clientConnection = null;
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         logger.info("Client connected");
-        if (client_connection != null) {
+        if (clientConnection != null) {
             logger.error("Another client tried to connect to this WebSocketServer");
             conn.close();
         }
         else {
-            client_connection = conn;
+            clientConnection = conn;
             door = new SmartDoor(this);
             logger.info("SmartDoor created");
         }
@@ -44,7 +44,7 @@ public class SmartDoorServer extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         logger.info("Client disconnected");
-        client_connection = null;
+        clientConnection = null;
         door = null;
     }
 
@@ -59,10 +59,10 @@ public class SmartDoorServer extends WebSocketServer {
         switch(action) {
         case "RESET":
             // We are ignoring any manufacturer param.
-            reset_sut();
+            resetSut();
             break;
         default:
-            door.handle_input(message);
+            door.handleInput(message);
         }
     }
 
@@ -73,20 +73,20 @@ public class SmartDoorServer extends WebSocketServer {
 
     @Override
     public void onStart() {
-        System.out.println("Server started!");
+        logger.info("Server started!");
         setConnectionLostTimeout(0);
         setConnectionLostTimeout(100);
     }
 
     public void send(String message) {
         logger.info("Sending message:  " + message);
-        if (client_connection == null)
+        if (clientConnection == null)
             logger.error("WebSocket connection is not yet initialised");
         else
-            client_connection.send(message);
+            clientConnection.send(message);
     }
 
-    private void reset_sut() {
+    private void resetSut() {
         logger.info("Resetting SUT");
         door = new SmartDoor(this);
         send("RESET_PERFORMED");

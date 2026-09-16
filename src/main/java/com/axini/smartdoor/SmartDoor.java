@@ -12,14 +12,19 @@ package com.axini.smartdoor;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // Implementation of the SmartDoor SUT.
 public class SmartDoor {
     enum State { CLOSED, OPENED, LOCKED, OFF }
 
+    private static final Logger logger = LoggerFactory.getLogger(SmartDoor.class);
+
     private SmartDoorServer server;
-    private State           state;
-    private int             passcode;
-    private int             attempts;
+    private State state;
+    private int passcode;
+    private int attempts;
 
     public SmartDoor(SmartDoorServer server) {
         this.server = server;
@@ -29,7 +34,7 @@ public class SmartDoor {
     }
 
     // Handle the input (i.e., the stimulus).
-    public void handle_input(String message) {
+    public void handleInput(String message) {
         String[] arr = message.split(":");
 
         String action = arr[0];
@@ -72,7 +77,7 @@ public class SmartDoor {
             break;
 
         default:
-            System.out.println("ERROR: unknown state");
+            logger.error("ERROR: unknown state");
         }
     }
 
@@ -96,22 +101,22 @@ public class SmartDoor {
             break;
 
         default:
-            System.out.println("ERROR: unknown state");
+            logger.error("ERROR: unknown state");
         }
     }
 
     // Handles the 'lock' command.
-    private void lock(String passcode_param) {
-        if (passcode_param == null) {
+    private void lock(String passcodeParam) {
+        if (passcodeParam == null) {
             server.send("INVALID_COMMAND");
             return;
         }
 
-        int passcode = Integer.parseInt(passcode_param);
+        int passcode = Integer.parseInt(passcodeParam);
 
         switch(state) {
         case CLOSED:
-            if (invalid_passcode(passcode)) {
+            if (isInvalidPasscode(passcode)) {
                 server.send("INVALID_PASSCODE");
                 return;
             }
@@ -134,18 +139,18 @@ public class SmartDoor {
             break;
 
         default:
-            System.out.println("ERROR: unknown state");
+            logger.error("ERROR: unknown state");
         }
     }
 
     // Handles the 'unlock' command.
-    private void unlock(String passcode_param) {
-        if (passcode_param == null) {
+    private void unlock(String passcodeParam) {
+        if (passcodeParam == null) {
             server.send("INVALID_COMMAND");
             return;
         }
 
-        int passcode = Integer.parseInt(passcode_param);
+        int passcode = Integer.parseInt(passcodeParam);
 
         switch(state) {
         case CLOSED:
@@ -154,7 +159,7 @@ public class SmartDoor {
             break;
 
         case LOCKED:
-            if (invalid_passcode(passcode)) {
+            if (isInvalidPasscode(passcode)) {
                 server.send("INVALID_PASSCODE");
                 return;
             }
@@ -179,7 +184,7 @@ public class SmartDoor {
             break;
 
         default:
-            System.out.println("ERROR: unknown state");
+            logger.error("ERROR: unknown state");
         }
     }
 
@@ -188,7 +193,7 @@ public class SmartDoor {
         server.send("INVALID_COMMAND");
     }
 
-    private boolean invalid_passcode(int passcode) {
+    private boolean isInvalidPasscode(int passcode) {
         return ((passcode < 0) || (passcode > 9999));
     }
 }
